@@ -1,12 +1,15 @@
 import { ProductProvider } from './context/ProductProvider'
 import ProductList from './components/ProductList'
 import './App.css'
+import CartProvider from './context/CartProvider'
 
 function App() {
 
   return (
     <ProductProvider>
-      <ProductList />
+      <CartProvider>
+        <ProductList />
+      </CartProvider>
     </ProductProvider>
   )
 }

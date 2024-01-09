@@ -8,22 +8,21 @@ export type ProductType = {
 
 const initialProducts: ProductType[] = [
     {
-        "sku": "item0001",
         "name": "Widget",
+        "sku": "item0001",
         "price": 9.99
     },
     {
-        "sku": "item0002",
         "name": "Premium Widget",
+        "sku": "item0002",
         "price": 19.99
     },
     {
-        "sku": "item0003",
         "name": "Deluxe Widget",
+        "sku": "item0003",
         "price": 29.99
     }
 ]
-
 
 type ProductContextType = {
     products: ProductType[]

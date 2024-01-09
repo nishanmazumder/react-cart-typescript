@@ -1,10 +1,13 @@
 import { ReactElement } from 'react'
 import useProduct from '../hook/useProduct'
 import Product from './Product';
+import useCart from '../hook/useCart';
 
 export default function ProductList() {
 
     const { products } = useProduct();
+
+    const { dispatch } = useCart();
 
     let content: ReactElement | ReactElement[] = <p>loading...</p>;
 
@@ -14,7 +17,7 @@ export default function ProductList() {
                 <Product
                     key={product.sku}
                     product={product}
-                // dispatch={dispatch}
+                    dispatch={dispatch}
                 // REDUCER_ACTIONS={REDUCER_ACTIONS}
                 // inCart={inCart}
                 />

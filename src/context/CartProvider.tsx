@@ -1,4 +1,11 @@
-import { ReactElement, createContext, useReducer } from "react";
+import { ReactElement, createContext, memo, useMemo, useReducer } from "react";
+
+const REDUCER_ACTION_TYPE = {
+    ADD: "ADD",
+    REMOVE: "REMOVE",
+    QUANTITY: "QUANTITY",
+    SUBMIT: "SUBMIT",
+}
 
 type CartItemType = {
     name: string,
@@ -13,17 +20,15 @@ const initCartState: initCartStateType = { cart: [] }
 
 const useCartContext = (initCartState: initCartStateType) => {
 
-    const [state, dispatch] = useReducer(reducer, initCartState)
+    const [state, dispatch] = useReducer(reducer, initCartState);
 
-    return { dispatch }
+    const REDUCER_ACTIONS = useMemo(() => {
+        return REDUCER_ACTION_TYPE
+    }, []);
+
+    return { dispatch, REDUCER_ACTIONS }
 }
 
-const REDUCER_ACTION_TYPE = {
-    ADD: "ADD",
-    REMOVE: "REMOVE",
-    QUANTITY: "QUANTITY",
-    SUBMIT: "SUBMIT",
-}
 
 export type ReducerActionType = typeof REDUCER_ACTION_TYPE
 
@@ -34,8 +39,20 @@ export type ReducerAction = {
 
 const reducer = (state: initCartStateType, action: ReducerAction) => {
 
-    console.log(state);
-    console.log(action);
+    switch (action.type) {
+        case REDUCER_ACTION_TYPE.ADD:
+
+
+            console.log(state);
+            console.log(action);
+
+
+            break;
+
+        default:
+            throw new Error('Undefined Reducer!')
+    }
+
 
     return {}
 }
@@ -44,7 +61,8 @@ const reducer = (state: initCartStateType, action: ReducerAction) => {
 export type initialCartContextType = ReturnType<typeof useCartContext>
 
 const initialCartContext: initialCartContextType = {
-    dispatch: () => { }
+    dispatch: () => { },
+    REDUCER_ACTIONS: REDUCER_ACTION_TYPE
 }
 
 export const CartContext = createContext<initialCartContextType>(initialCartContext)

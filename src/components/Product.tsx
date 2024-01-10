@@ -1,19 +1,13 @@
-import { ReducerAction } from 'react';
+import { ReducerAction, ReducerActionType } from '../context/CartProvider';
 import { ProductType } from '../context/ProductProvider'
-import useCart from '../hook/useCart';
 
 type PropsType = {
     product: ProductType,
-    // dispatch: React.Dispatch<ReducerAction>
+    dispatch: React.Dispatch<ReducerAction>,
+    REDUCER_ACTIONS: ReducerActionType
 }
 
-type useCartType = {
-    dispatch: React.Dispatch<ReducerAction>
-}
-
-export default function Product({ product }: PropsType) {
-
-    const { dispatch }: useCartType = useCart();
+export default function Product({ product, dispatch, REDUCER_ACTIONS }: PropsType) {
 
     const img: string = new URL(`../images/${product.sku}.jpg`, import.meta.url).href;
 
@@ -21,9 +15,9 @@ export default function Product({ product }: PropsType) {
 
     const addToCart = () => {
         dispatch({
-            test: "test",
-            action: "action"
-        }) as 
+            type: REDUCER_ACTIONS.ADD,
+            payload: { ...product, qty: 1 }
+        })
     }
 
     return (

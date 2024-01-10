@@ -1,4 +1,4 @@
-import { ReactElement, createContext, useReducer } from "react"
+import { ReactElement, createContext, useReducer } from "react";
 
 type CartItemType = {
     name: string,
@@ -29,7 +29,7 @@ export type ReducerActionType = typeof REDUCER_ACTION_TYPE
 
 export type ReducerAction = {
     type: string,
-    payload: CartItemType
+    payload?: CartItemType
 }
 
 const reducer = (state: initCartStateType, action: ReducerAction) => {
@@ -41,7 +41,7 @@ const reducer = (state: initCartStateType, action: ReducerAction) => {
 }
 
 
-type initialCartContextType = ReturnType<typeof useCartContext>
+export type initialCartContextType = ReturnType<typeof useCartContext>
 
 const initialCartContext: initialCartContextType = {
     dispatch: () => { }

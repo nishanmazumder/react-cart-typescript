@@ -1,4 +1,4 @@
-import { ReactElement, createContext, memo, useMemo, useReducer } from "react";
+import { ReactElement, createContext, useMemo, useReducer } from "react";
 
 const REDUCER_ACTION_TYPE = {
     ADD: "ADD",
@@ -7,7 +7,7 @@ const REDUCER_ACTION_TYPE = {
     SUBMIT: "SUBMIT",
 }
 
-type CartItemType = {
+export type CartItemType = {
     name: string,
     sku: string,
     price: number,
@@ -34,7 +34,16 @@ const useCartContext = (initCartState: initCartStateType) => {
         return previousVal + (cartItem.price * cartItem.qty);
     }, 0);
 
-    return { dispatch, REDUCER_ACTIONS, totalCartItem, totalCartPrice }
+    // const cart = state.cart;
+
+    const cart = state.cart.sort((a, b) => {
+        const itemA = Number(a.sku.slice(-4))
+        const itemB = Number(b.sku.slice(-4))
+        return itemA - itemB
+    })
+
+
+    return { dispatch, REDUCER_ACTIONS, totalCartItem, totalCartPrice, cart }
 }
 
 
@@ -64,6 +73,34 @@ const reducer = (state: initCartStateType, action: ReducerAction): initCartState
             }
         }
 
+        case REDUCER_ACTION_TYPE.QUANTITY: {
+
+            const { sku, qty } = action.payload;
+            const isExist: CartItemType | undefined = state.cart.find(item => item.sku === sku)
+
+            if (!isExist) {
+                throw new Error('Item Not Exist!');
+            }
+
+            const updateItem = { ...isExist, qty }
+            const filteredCart: CartItemType[] = state.cart.filter(item => item.sku !== sku)
+
+            return {
+                ...state,
+                cart: [...filteredCart, updateItem]
+            }
+        }
+
+        case REDUCER_ACTION_TYPE.REMOVE: {
+            const { sku } = action.payload
+            const filteredCart: CartItemType[] = state.cart.filter(item => item.sku !== sku)
+
+            return {
+                ...state,
+                cart: [...filteredCart]
+            }
+        }
+
         default:
             throw new Error('Undefined Reducer!')
     }
@@ -76,7 +113,8 @@ const initialCartContext: initialCartContextType = {
     dispatch: () => { },
     REDUCER_ACTIONS: REDUCER_ACTION_TYPE,
     totalCartItem: 0,
-    totalCartPrice: 0
+    totalCartPrice: 0,
+    cart: []
 }
 
 export const CartContext = createContext<initialCartContextType>(initialCartContext)

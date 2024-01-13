@@ -7,23 +7,24 @@ export default function ProductList() {
 
     const { products } = useProduct();
 
-    const { dispatch, REDUCER_ACTIONS } = useCart();
+    const { dispatch, REDUCER_ACTIONS, cart } = useCart();
 
     let content: ReactElement | ReactElement[] = <p>loading...</p>;
 
     if (products?.length) {
         content = products.map(product => {
+            const inCart: boolean = cart.some(item => product.sku === item.sku)
             return (
                 <Product
                     key={product.sku}
                     product={product}
                     dispatch={dispatch}
                     REDUCER_ACTIONS={REDUCER_ACTIONS}
-                // inCart={inCart}
+                    inCart={inCart}
                 />
             )
         })
     }
 
-    return content;
+    return <div style={{ display: 'flex', gap: '1em' }}>{content}</div>;
 }
